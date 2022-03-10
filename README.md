@@ -1,86 +1,37 @@
-three.js
-========
+# ISSUE : 
 
-[![NPM Package][npm]][npm-url]
-[![Build Size][build-size]][build-size-url]
-[![NPM Downloads][npm-downloads]][npmtrends-url]
-[![Language Grade][lgtm]][lgtm-url]
+Reproduce in :
+OS : macOS (v12.1 ; v12.2.1)
+Browser : chrome (v98; v99) , safari, firefox
 
-#### JavaScript 3D library ####
+Outline pass adding render issue effect.
 
-The aim of the project is to create an easy to use, lightweight, cross-browser, general purpose 3D library. The current builds only include a WebGL renderer but WebGPU (experimental), SVG and CSS3D renderers are also available in the examples.
+# HOW TO REPRODUCE
 
-[Examples](https://threejs.org/examples/) &mdash;
-[Documentation](https://threejs.org/docs/) &mdash;
-[Wiki](https://github.com/mrdoob/three.js/wiki) &mdash;
-[Migrating](https://github.com/mrdoob/three.js/wiki/Migration-Guide) &mdash;
-[Questions](http://stackoverflow.com/questions/tagged/three.js) &mdash;
-[Forum](https://discourse.threejs.org/) &mdash;
-[Slack](https://join.slack.com/t/threejs/shared_invite/zt-rnuegz5e-FQpc6YboDVW~5idlp7GfDw) &mdash;
-[Discord](https://discordapp.com/invite/HF4UdyF)
+At root, 
+- Launch npm i (install modules)
+- Launch npm start (launch web server at https://localhost:8080/)
+Check the server url inside terminal 
 
-### Usage ###
+[HTTP] server started on ::8080 for path: /Users/a.delforges/Documents/Dev/forked-three.js
+[HTTP] available on:
+[HTTP]    http://localhost:8080 -> server url
+[HTTP]    http://127.0.0.1:8080
+[HTTP]    http://192.168.1.17:8080
+[HTTP] press CTRL-C to stop the server.
 
-This code creates a scene, a camera, and a geometric cube, and it adds the cube to the scene. It then creates a `WebGL` renderer for the scene and camera, and it adds that viewport to the `document.body` element. Finally, it animates the cube within the scene for the camera.
+- Open Chrome at [serverurl]/examples/webgl_postprocessing_outline
+- See incorrect results (black and white stripes on the building).
 
-```javascript
-import * as THREE from './js/three.module.js';
+# HOW TO SHOW CORRECT RESULTS
 
-let camera, scene, renderer;
-let geometry, material, mesh;
+- In ./examples/webgl_postprocessing_outline.html ; line 206 "composer.addPass( outlinePass );" comment this line to not add the pass to the postprocessing stack.
+- See correct results (white building, no stripes).
+- Cannot outline objects anymore
 
-init();
+# EXPECTED RESULTS
 
-function init() {
-
-	camera = new THREE.PerspectiveCamera( 70, window.innerWidth / window.innerHeight, 0.01, 10 );
-	camera.position.z = 1;
-
-	scene = new THREE.Scene();
-
-	geometry = new THREE.BoxGeometry( 0.2, 0.2, 0.2 );
-	material = new THREE.MeshNormalMaterial();
-
-	mesh = new THREE.Mesh( geometry, material );
-	scene.add( mesh );
-
-	renderer = new THREE.WebGLRenderer( { antialias: true } );
-	renderer.setSize( window.innerWidth, window.innerHeight );
-	renderer.setAnimationLoop( animation );
-	document.body.appendChild( renderer.domElement );
-
-}
-
-function animation( time ) {
-
-	mesh.rotation.x = time / 2000;
-	mesh.rotation.y = time / 1000;
-
-	renderer.render( scene, camera );
-
-}
-```
-
-If everything went well, you should see [this](https://jsfiddle.net/vy29n6aj/).
-
-### Cloning this repository ###
-
-Cloning the repo with all its history results in a ~2 GB download. If you don't need the whole history you can use the `depth` parameter to significantly reduce download size.
-
-```sh
-git clone --depth=1 https://github.com/mrdoob/three.js.git
-```
-
-### Change log ###
-
-[Releases](https://github.com/mrdoob/three.js/releases)
+- Outline pass should not add render issue effect (black and white stripes).
+- Possibly related forum : https://discourse.threejs.org/t/special-effect-caused-by-outlinepass/25001/5 (tested on this project).
 
 
-[npm]: https://img.shields.io/npm/v/three
-[npm-url]: https://www.npmjs.com/package/three
-[build-size]: https://badgen.net/bundlephobia/minzip/three
-[build-size-url]: https://bundlephobia.com/result?p=three
-[npm-downloads]: https://img.shields.io/npm/dw/three
-[npmtrends-url]: https://www.npmtrends.com/three
-[lgtm]: https://img.shields.io/lgtm/alerts/github/mrdoob/three.js
-[lgtm-url]: https://lgtm.com/projects/g/mrdoob/three.js/
