@@ -10,7 +10,8 @@ import {
 	UniformsUtils,
 	Vector2,
 	Vector3,
-	WebGLRenderTarget
+	WebGLRenderTarget,
+	FloatType
 } from 'three';
 import { Pass, FullScreenQuad } from './Pass.js';
 import { CopyShader } from '../shaders/CopyShader.js';
@@ -54,7 +55,7 @@ class OutlinePass extends Pass {
 		this.prepareMaskMaterial.side = DoubleSide;
 		this.prepareMaskMaterial.fragmentShader = replaceDepthToViewZ( this.prepareMaskMaterial.fragmentShader, this.renderCamera );
 
-		this.renderTargetDepthBuffer = new WebGLRenderTarget( this.resolution.x, this.resolution.y );
+		this.renderTargetDepthBuffer = new WebGLRenderTarget( this.resolution.x, this.resolution.y, { type: FloatType } );
 		this.renderTargetDepthBuffer.texture.name = 'OutlinePass.depth';
 		this.renderTargetDepthBuffer.texture.generateMipmaps = false;
 
